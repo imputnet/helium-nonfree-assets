@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Compute release tag
         id: timestamp
-        run: echo "tag=$(date -u +%Y%m%d%H%M%S)" >> "$GITHUB_OUTPUT"
+        run: echo "tag=$(date -u +%Y%m%d%H%M)" >> "$GITHUB_OUTPUT"
 
       - name: Check out sources
         uses: actions/checkout@v4
@@ -31,7 +31,7 @@ jobs:
         run: scripts/onboarding-assets.sh
 
       - name: Package generated files
-        run: scripts/package-generated.sh
+        run: scripts/package-generated.sh "${{ steps.timestamp.outputs.tag }}"
 
       - name: Make release body
         run: |
@@ -47,8 +47,8 @@ jobs:
           draft: false
           prerelease: true
           files: |
-            generated/nonfree-search-engines-data.tar.gz
-            generated/nonfree-onboarding-assets.tar.gz
+            generated/nonfree-search-engines-data-${{ steps.timestamp.outputs.tag }}.tar.gz
+            generated/nonfree-onboarding-assets-${{ steps.timestamp.outputs.tag }}.tar.gz
           name: ${{ steps.timestamp.outputs.tag }}
           tag_name: ${{ steps.timestamp.outputs.tag }}
           token: ${{ secrets.GITHUB_TOKEN }}

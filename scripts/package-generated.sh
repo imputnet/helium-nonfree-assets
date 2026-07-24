@@ -4,11 +4,12 @@ set -euo pipefail
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 repo_root="$(cd -- "$script_dir/.." && pwd)"
 generated_dir="$repo_root/generated"
+version="${1-}"
 
 export COPYFILE_DISABLE=1
 
 for package in nonfree-search-engines-data nonfree-onboarding-assets; do
-  archive="$generated_dir/$package.tar.gz"
+  archive="$generated_dir/$package${version:+-$version}.tar.gz"
 
   if [[ ! -d "$generated_dir/$package" ]]; then
     printf 'Error: Generated directory not found: %s\n' "$generated_dir/$package" >&2
