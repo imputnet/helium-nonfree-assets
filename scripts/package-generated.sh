@@ -26,8 +26,8 @@ for package in nonfree-search-engines-data nonfree-onboarding-assets; do
     --exclude '._*' \
     --exclude '*/._*' \
     -czf "$archive" \
-    -C "$generated_dir" \
-    "$package"
+    -C "$generated_dir/$package" \
+    .
 
   printf 'Packaged: %s\n' "$archive"
 done
