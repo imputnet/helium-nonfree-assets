@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2026 The Helium Authors
+You can use, redistribute, and/or modify this source code under
+the terms of the GPL-3.0 license that can be found in the LICENSE file.
+-->
+<grit latest_public_release="0" current_release="1">
+  <outputs>
+    <output filename="search_engines_scaled_resources.h" type="rc_header" context="default_100_percent">
+      <emit emit_type='prepend'></emit>
+    </output>
+    <output filename="search_engines_scaled_resources_map.cc" type="resource_map_source" context="default_100_percent" />
+    <output filename="search_engines_scaled_resources_map.h" type="resource_map_header" context="default_100_percent" />
+    <output filename="search_engines_resources_100_percent.pak" type="data_package" context="default_100_percent" />
+    <output filename="search_engines_resources_200_percent.pak" type="data_package" context="default_200_percent" />
+    <output filename="search_engines_resources_300_percent.pak" type="data_package" context="default_300_percent" />
+  </outputs>
+  <release seq="1">
+    <structures fallback_to_low_resolution="true">
+      <part file="definitions/search_engine_scaled_resources.grdp" />
+    </structures>
+  </release>
+</grit>

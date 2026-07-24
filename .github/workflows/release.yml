@@ -1,0 +1,54 @@
+name: Build release
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-release:
+    runs-on: macos-26
+
+    steps:
+      - name: Compute release tag
+        id: timestamp
+        run: echo "tag=$(date -u +%Y%m%d%H%M%S)" >> "$GITHUB_OUTPUT"
+
+      - name: Check out sources
+        uses: actions/checkout@v4
+
+      - name: Install tools
+        run: brew install librsvg libavif
+
+      - name: Extract browser icons
+        run: scripts/extract-browser-icons.sh
+
+      - name: Generate search engine data
+        run: scripts/search-engines-data.sh
+
+      - name: Generate onboarding assets
+        run: scripts/onboarding-assets.sh
+
+      - name: Package generated files
+        run: scripts/package-generated.sh
+
+      - name: Make release body
+        run: |
+          cd generated
+          echo '```' > /tmp/release.md
+          shasum -a 256 nonfree-*.tar.gz >> /tmp/release.md
+          echo '```' >> /tmp/release.md
+
+      - name: Publish release
+        uses: imputnet/action-gh-release@v2.5
+        with:
+          body_path: /tmp/release.md
+          draft: false
+          prerelease: true
+          files: |
+            generated/nonfree-search-engines-data.tar.gz
+            generated/nonfree-onboarding-assets.tar.gz
+          name: ${{ steps.timestamp.outputs.tag }}
+          tag_name: ${{ steps.timestamp.outputs.tag }}
+          token: ${{ secrets.GITHUB_TOKEN }}
