@@ -23,6 +23,9 @@ Helium.
 #### `search-engines-data.sh`
 
 Builds search engine assets from the source SVGs. Requires `librsvg`.
+Generates the GRIT definitions and `search_engine_assets.gni` from the same SVG
+list, including every configured image scale. Both manifests are included in
+the search engine archive automatically.
 
 #### `extract-browser-icons.sh`
 

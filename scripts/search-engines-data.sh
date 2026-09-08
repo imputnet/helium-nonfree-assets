@@ -38,8 +38,9 @@ validate_inputs() {
 generate_definitions() {
   local definitions_dir="$output_dir/definitions"
   local manifest="$definitions_dir/search_engine_scaled_resources.grdp"
+  local assets_manifest="$output_dir/search_engine_assets.gni"
   local grd_output="$output_dir/${grd_source##*/}"
-  local source filename name resource_name
+  local source filename name resource_name scale
 
   mkdir -p "$definitions_dir"
 
@@ -69,6 +70,25 @@ generate_definitions() {
   } > "$manifest"
 
   printf 'Generated: %s\n' "$manifest"
+
+  {
+    echo '# Copyright 2026 The Helium Authors'
+    echo '# You can use, redistribute, and/or modify this source code under'
+    echo '# the terms of the GPL-3.0 license that can be found in the LICENSE file.'
+    echo
+    echo 'search_engine_scaled_resource_files = ['
+
+    for scale in "${scales[@]}"; do
+      for source in "$@"; do
+        filename="${source##*/}"
+        echo "  \"$scale/search_engines/${filename%.svg}.png\","
+      done
+    done
+
+    echo ']'
+  } > "$assets_manifest"
+
+  echo "Generated: $assets_manifest"
 }
 
 generate_scaled_images() {
