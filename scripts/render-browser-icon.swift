@@ -34,10 +34,17 @@ func legacyIcon(forAppAt appPath: String) -> NSImage? {
 
 let image: NSImage
 
-// Arc and Opera don't ship Liquid Glass icons, so we use legacy ones instead.
-if browserName == "arc" || browserName == "opera" {
+// Arc doesn't ship a Liquid Glass icon, so we use its legacy one instead.
+if browserName == "arc" {
     image = legacyIcon(forAppAt: appPath)
         ?? NSWorkspace.shared.icon(forFile: appPath)
+} else if browserName == "opera" {
+    // Opera also doesn't ship a Liquid Glass icon, but macOS adapts it at 256px.
+    let systemIcon = NSWorkspace.shared.icon(forFile: appPath)
+    image = NSImage(size: NSSize(width: 256, height: 256), flipped: false) { rect in
+        systemIcon.draw(in: rect, from: .zero, operation: .copy, fraction: 1)
+        return true
+    }
 } else {
     image = NSWorkspace.shared.icon(forFile: appPath)
 }
