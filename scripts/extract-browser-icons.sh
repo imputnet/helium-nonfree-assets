@@ -50,7 +50,7 @@ render_icon() {
   printf 'Extracted: %s\n' "$output"
 }
 
-while IFS= read -r line || [[ -n "$line" ]]; do
+while IFS= read -r -u 3 line || [[ -n "$line" ]]; do
   [[ -z "$line" || "$line" == \#* ]] && continue
 
   if [[ "$line" != *=* ]]; then
@@ -119,7 +119,7 @@ while IFS= read -r line || [[ -n "$line" ]]; do
 
   render_icon "$name" "$app_path"
   cleanup
-done < "$config_file"
+done 3< "$config_file"
 
 safari="/Applications/Safari.app"
 if [[ -d "$safari" ]]; then
