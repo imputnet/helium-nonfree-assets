@@ -41,14 +41,11 @@ jobs:
           echo '```' >> /tmp/release.md
 
       - name: Publish release
-        uses: imputnet/action-gh-release@v2.5
+        uses: imputnet/immutable-release@v1
         with:
-          body_path: /tmp/release.md
-          draft: false
+          tag: ${{ steps.timestamp.outputs.tag }}
           prerelease: true
+          notes-file: /tmp/release.md
           files: |
             generated/nonfree-search-engines-data-${{ steps.timestamp.outputs.tag }}.tar.gz
             generated/nonfree-onboarding-assets-${{ steps.timestamp.outputs.tag }}.tar.gz
-          name: ${{ steps.timestamp.outputs.tag }}
-          tag_name: ${{ steps.timestamp.outputs.tag }}
-          token: ${{ secrets.GITHUB_TOKEN }}
